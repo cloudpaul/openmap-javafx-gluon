@@ -1,5 +1,6 @@
 package uk.co.cloudswing.openmap;
 
+import java.awt.Button;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -30,7 +31,7 @@ public class MainController {
         label.setText(String.format(resources.getString("label.text"), "JavaFX", javafxVersion));
         
         SwingNode swingNode = new SwingNode();
-
+Button b;
         createSwingContent(swingNode);
 
         form.getChildren().add(swingNode);

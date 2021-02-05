@@ -18,7 +18,7 @@
         <javafx.plugin.version>0.0.5</javafx.plugin.version>
         <client.plugin.version>0.1.35</client.plugin.version>
         <attach.version>4.0.10</attach.version>
-        <main.class>com.mycompany.sample.Main</main.class>
+        <main.class>uk.co.cloudswing.openmap.Main</main.class>
     </properties>
 
     <dependencies>
@@ -52,7 +52,7 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-        <dependency>
+<!--         <dependency>
             <groupId>com.gluonhq.attach</groupId>
             <artifactId>display</artifactId>
             <version>${attach.version}</version>
@@ -76,11 +76,47 @@
             <groupId>com.gluonhq.attach</groupId>
             <artifactId>util</artifactId>
             <version>${attach.version}</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 
     <build>
         <plugins>
+<!-- 		    <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-jar-plugin</artifactId>
+		      <configuration>
+		        <archive>
+		          <manifest>
+		            <addClasspath>true</addClasspath>
+		            <classpathPrefix>lib/</classpathPrefix>
+		            <mainClass>${main.class}</mainClass>
+		          </manifest>
+		        </archive>
+		      </configuration>
+		    </plugin> -->
+	          <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-shade-plugin</artifactId>
+		        <executions>
+		          <execution>
+		            <id>lmdbjava-shade</id>
+		            <goals>
+		              <goal>shade</goal>
+		            </goals>
+		            <phase>package</phase>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>${main.class}</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+		          </execution>
+		        </executions>
+		      </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -108,17 +144,43 @@
                         <list>storage</list>
                     </attachList>
                     <bundlesList>
-                        <list>com.mycompany.sample.main</list>
+                        <list>uk.co.cloudswing.openmap.main</list>
                     </bundlesList>
                     <reflectionList>
-                        <list>com.mycompany.sample.MainController</list>
+                        <list>uk.co.cloudswing.openmap.MainController</list>
+                        
+                       <list>javafx.fxml.FXMLLoader</list>
+                       <list>javafx.scene.control.TableView</list>                        
+                       <list>javafx.scene.control.Button</list>                        
+                       <list>javafx.scene.control.TableColumn</list>                        
+                       <list>javafx.scene.control.TableColumnBase</list>                        
+                       <list>javafx.scene.control.TextField</list>                        
+                       <list>javafx.scene.control.ToggleGroup</list>                        
+                       <list>javafx.scene.control.RadioButton</list>                        
+                       <list>javafx.scene.control.Separator</list>                        
+                       <list>javafx.scene.control.cell.PropertyValueFactory</list>                        
+                       <list>javafx.scene.layout.GridPane</list>
                     </reflectionList>
+                    <nativeImageArgs>
+                        <nativeImageArg>--allow-incomplete-classpath</nativeImageArg>
+                        <nativeImageArg>--report-unsupported-elements-at-runtime</nativeImageArg>
+                        <nativeImageArg>-Djava.awt.headless=false</nativeImageArg>
+                       <!--  <nativeImageArg>-D- -add-exports java.base/sun.nio.ch=ALL-UNNAMED</nativeImageArg> -->
+                       <!--  <nativeImageArg>-H:TraceClassInitialization</nativeImageArg> -->
+                        <!-- <nativeImageArg>-H:+AllowIncompleteClasspath</nativeImageArg> -->
+                       <!--  <nativeImageArg>-H:-CheckToolchain</nativeImageArg> -->
+                        <!-- <nativeImageArg>-H:IncludeResources=dynamic-proxies.json,jni-config.json</nativeImageArg>
+                        <nativeImageArg>-H:DynamicProxyConfigurationFiles=../../../../dynamic-proxies.json</nativeImageArg> -->
+                        <!-- probably not needed -->
+                        <!-- <nativeImageArg>-H:UseLibC=glibc</nativeImageArg>
+                        <nativeImageArg>-H:CCompilerOption=-Wno-everything</nativeImageArg> -->
+                    </nativeImageArgs>                    
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
-    <profiles>
+<!--     <profiles>
         <profile>
             <id>desktop</id>
             <activation>
@@ -163,5 +225,5 @@
                 <client.target>ios</client.target>
             </properties>
         </profile>
-    </profiles>
+    </profiles> -->
 </project>
